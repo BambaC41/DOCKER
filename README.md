@@ -1,6 +1,6 @@
 # Api Voyage
 
-API Go : destinations et favoris. Données en **CSV** (sans BDD) ou **MySQL** (variables d'environnement).
+API Go : destinations et favoris.
 
 ## Lancer
 
@@ -38,3 +38,4 @@ Sans `DB_HOST`/`DB_USER` : CSV dans `data/`. Avec variables DB : MySQL (table `f
 - `data/favorites.csv` — `id,user_id,destination_id,created_at`
 
 Option : `API_VOYAGE_DATA_DIR` pour changer le dossier (défaut : `data`).
+
