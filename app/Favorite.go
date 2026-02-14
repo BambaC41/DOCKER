@@ -10,7 +10,6 @@ import (
 )
 
 func GetAllFavorites(w http.ResponseWriter, r *http.Request) {
-	// Suppression de la logique userID car la colonne n'existe plus en BDD
 	favs, err := db.GetAllFavorites() 
 	if err != nil {
 		fmt.Println("GetAllFavorites error:", err)
@@ -23,7 +22,6 @@ func GetAllFavorites(w http.ResponseWriter, r *http.Request) {
 }
 
 type createFavoriteRequest struct {
-	// Seul destination_id est conservé
 	DestinationID int `json:"destination_id"`
 }
 
@@ -34,13 +32,11 @@ func CreateFavorite(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Validation simplifiée : seul destination_id est requis
 	if req.DestinationID <= 0 {
 		http.Error(w, "destination_id required", http.StatusBadRequest)
 		return
 	}
 
-	// Appel à db.CreateFavorite avec un seul argument
 	fav, err := db.CreateFavorite(req.DestinationID)
 	if err != nil {
 		fmt.Println("CreateFavorite error:", err)
@@ -76,4 +72,5 @@ func DeleteFavorite(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusNoContent)
+
 }
