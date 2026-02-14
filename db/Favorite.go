@@ -5,7 +5,7 @@ import (
 	"github.com/Api_voyage/models"
 )
 
-// GetAllFavorites récupère tous les favoris (le filtrage par UserID est retiré car absent de la table)
+
 func GetAllFavorites() ([]models.Favorite, error) {
 	if Conn == nil {
 		return nil, fmt.Errorf("connexion DB inactive")
@@ -20,7 +20,6 @@ func GetAllFavorites() ([]models.Favorite, error) {
 	var favs []models.Favorite
 	for rows.Next() {
 		var f models.Favorite
-		// On scanne uniquement les colonnes existantes dans ta nouvelle table
 		if err := rows.Scan(&f.ID, &f.DestinationID, &f.CreatedAt); err != nil {
 			return nil, err
 		}
@@ -34,7 +33,7 @@ func CreateFavorite(destinationID int) (models.Favorite, error) {
 		return models.Favorite{}, fmt.Errorf("connexion DB inactive")
 	}
 
-	// MySQL gère le added_at automatiquement (DEFAULT CURRENT_TIMESTAMP)
+	
 	res, err := Conn.Exec("INSERT INTO favorites (destination_id) VALUES (?)", destinationID)
 	if err != nil {
 		return models.Favorite{}, err
@@ -48,8 +47,6 @@ func CreateFavorite(destinationID int) (models.Favorite, error) {
 	return models.Favorite{
 		ID:            int(id),
 		DestinationID: destinationID,
-		// Note : CreatedAt sera vide ici à moins de faire un SELECT, 
-		// ou tu peux mettre l'heure actuelle en Go.
 	}, nil
 }
 
@@ -68,4 +65,5 @@ func DeleteFavoriteByID(id int) (bool, error) {
 		return false, err
 	}
 	return aff > 0, nil
+
 }
