@@ -11,7 +11,6 @@ import (
 )
 
 func main() {
-	// Connexion BDD si variables Docker présentes (sinon l'app utilise les CSV)
 	if os.Getenv("DB_HOST") != "" || os.Getenv("DB_USER") != "" {
 		db.Conn = db.NewDB()
 	}
@@ -29,3 +28,4 @@ func main() {
 	fmt.Println("Listening at http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
+
