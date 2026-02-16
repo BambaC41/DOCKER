@@ -1,19 +1,25 @@
+import React from "react";
 import { Link } from "react-router-dom";
 
 function DestinationCard({ destination }) {
+  if (!destination) return null;
+  const { id, name, country, image_url, description } = destination;
+
   return (
-    <div style={{ width: "250px", background: "#222", color: "white", padding: "10px", borderRadius: "10px" }}>
-      <img
-        src={destination.image_url}
-        alt={destination.name}
-        style={{ width: "100%", borderRadius: "10px" }}
-      />
-      <h3>{destination.name}</h3>
-      <p>{destination.country}</p>
-      <Link to={`/destination/${destination.id}`} style={{ color: "cyan" }}>
-        Voir détail
+    <article className="card">
+      <Link to={`/destination/${id}`} className="card-link">
+        <div className="card-img-wrap">
+          <img src={image_url} alt={name} className="card-img" />
+        </div>
+        <div className="card-body">
+          <h3 className="card-title">{name}</h3>
+          <div className="muted">{country}</div>
+          <p className="card-desc">
+            {description ? (description.length > 120 ? description.slice(0, 120) + "…" : description) : ""}
+          </p>
+        </div>
       </Link>
-    </div>
+    </article>
   );
 }
 

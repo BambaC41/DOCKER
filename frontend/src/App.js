@@ -6,20 +6,26 @@ import Favorites from "./pages/Favorites";
 function App() {
   return (
     <Router>
-      <nav style={{ padding: "20px", background: "#111" }}>
-        <Link to="/" style={{ marginRight: "20px", color: "white" }}>
-          Home
-        </Link>
-        <Link to="/favorites" style={{ color: "white" }}>
-          Favoris
-        </Link>
-      </nav>
+      <header className="site-header">
+        <div className="container">
+          <div className="brand">
+            <span className="logo" aria-hidden />
+            City Guide
+          </div>
+          <nav className="nav">
+            <Link to="/" className="nav-link">Home</Link>
+            <Link to="/favorites" className="nav-link">Favoris</Link>
+          </nav>
+        </div>
+      </header>
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/destination/:id" element={<Detail />} />
-        <Route path="/favorites" element={<Favorites />} />
-      </Routes>
+      <main className="container content">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/destination/:id" element={<Detail />} />
+          <Route path="/favorites" element={<Favorites />} />
+        </Routes>
+      </main>
     </Router>
   );
 }

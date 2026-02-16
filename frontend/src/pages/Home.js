@@ -11,8 +11,11 @@ function Home() {
 
   return (
     <div>
-      <h1>City Guide 🌍</h1>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+        <h1 className="page-title">City Guide <span className="page-sub">Découvre des villes inspirantes</span></h1>
+      </div>
+
+      <div className="grid">
         {destinations.map((d) => (
           <DestinationCard key={d.id} destination={d} />
         ))}
