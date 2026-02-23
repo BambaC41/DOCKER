@@ -1,7 +1,5 @@
 <?php
-$API_BASE = "http://localhost:8000:8080"; //http://localhost:8000 pour test , http://172.168.0.3 or test 
-define("USER_ID", 1);
-
+$API_BASE = rtrim(getenv("API_BASE") ?: "http://localhost:8080");
 function api_get_json($url) {
     $ch = curl_init($url);
     curl_setopt_array($ch, [
@@ -15,13 +13,8 @@ function api_get_json($url) {
     $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
-    if ($raw === false) {
-        throw new Exception("cURL error: $err");
-    }
-    if ($code < 200 || $code >= 300) {
-        $snippet = substr($raw, 0, 200);
-        throw new Exception("HTTP $code: $snippet");
-    }
+    if ($raw === false) throw new Exception("cURL error: $err");
+    if ($code < 200 || $code >= 300) throw new Exception("HTTP $code: " . substr($raw, 0, 200));
 
     $data = json_decode($raw, true);
     if ($data === null && json_last_error() !== JSON_ERROR_NONE) {
@@ -66,17 +59,13 @@ function api_delete($url) {
     curl_close($ch);
 
     if ($raw === false) throw new Exception("cURL error: $err");
-
-    // Certaines versions renvoient 204 No Content
     if ($code === 204) return true;
-
     if ($code < 200 || $code >= 300) throw new Exception("HTTP $code: " . substr($raw, 0, 200));
     return true;
 }
 
 $error = "";
 
-// Actions favoris
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     try {
         $action = $_POST["action"] ?? "";
@@ -84,9 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($action === "add") {
             $destId = intval($_POST["destination_id"] ?? 0);
             if ($destId > 0) {
-                // ✅ API actuelle: user_id + destination_id
                 api_post_json("$API_BASE/favorites", [
-                    "user_id" => USER_ID,
                     "destination_id" => $destId
                 ]);
             }
@@ -110,9 +97,12 @@ $favMap = [];
 
 try {
     $destinations = api_get_json("$API_BASE/destinations");
+} catch (Exception $e) {
+    $error = $e->getMessage();
+}
 
-
-    $favorites = api_get_json("$API_BASE/favorites?user_id=" . USER_ID);
+try {
+    $favorites = api_get_json("$API_BASE/favorites");
 
     if (is_array($favorites)) {
         foreach ($favorites as $f) {
@@ -122,7 +112,10 @@ try {
         }
     }
 } catch (Exception $e) {
-    $error = $error ?: $e->getMessage();
+    
+    if (!$error) {
+        $error = "Favoris indisponibles: " . $e->getMessage();
+    }
 }
 
 include __DIR__ . "/../html/template.php";

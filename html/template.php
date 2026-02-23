@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<header>
+<header>  
   <h1>🌍 CityGuide</h1>
   <p class="muted">API: <?= htmlspecialchars($API_BASE ?? "") ?></p>
 </header>
@@ -25,7 +25,7 @@
 <?php foreach ($destinations as $d): 
   $id = intval($d["id"] ?? 0);
   $isFav = isset($favMap[$id]);
-  $img = $d["image_url"] ?? "";
+  $img = $d["image_url"] ?? ($d["image"] ?? "");
 ?>
   <div class="card">
     <div class="image" style="background-image:url('<?= htmlspecialchars($img) ?>')"></div>
