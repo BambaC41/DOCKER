@@ -15,6 +15,35 @@ services:
     ports:
       - "3306:3306"
 
+  backend:
+    image: adixdix/back-api-voyage:v1.12
+    container_name: api-voyage-prod
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_USER=appuser
+      - DB_PASSWORD=motdepasseApp
+      - DB_NAME=voyages
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+
+  frontend:
+    image: bambac41/cityguide-front:latest
+    container_name: cityguide-front
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      - API_BASE=http://api-voyage-prod:8080
+    ports:
+      - "8000:80"
+    networks:
+      - app-network
+
 volumes:
   mysql_data:
 
