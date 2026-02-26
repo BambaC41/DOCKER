@@ -1,5 +1,5 @@
 <?php
-$API_BASE = rtrim(getenv("API_BASE") ?: "http://localhost:8080");//on github
+$API_BASE = rtrim(getenv("API_BASE") ?: "http://localhost:8080");
 function api_get_json($url) {
     $ch = curl_init($url);
     curl_setopt_array($ch, [
